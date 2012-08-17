@@ -1,0 +1,85 @@
+command /skTell <player> <text>:
+	permission: skchat.tell
+	description: Send a message to a player.
+	trigger:
+		set {skchat.%argument 1%.telltext} to argument 2
+		set {skchat.%argument 1%.tellfrom} to player
+		set {skchat.%argument 1%.tellto} to player argument
+		if {skchat.%argument 1%.afk} is false:
+			send "From %player%: <aqua>%{skchat.%argument 1%.telltext}%" to {skchat.%argument 1%.tellto}
+		else:
+			set {skchat.%argument 1%.tellnomsg} to false
+			message "%{skchat.%argument 1%.tellto}% is currently AFK, they will recieve the message when they come back"
+			
+
+
+command /skAfk:
+	permission: skchat.afk
+	description: Set your status as AFK.
+	trigger:
+		if {skchat.%player%.afk} is true:
+			message "You are already AFK"
+		else:
+			broadcast "%player% is now AFK!"
+			set {skchat.%player%.afk} to true
+			message "You are now AFK"
+
+on chat:
+	if {skchat.%player%.afk} is true:
+		set {skchat.%player%.afk} to false
+		if {skchat.%player%.tellnomsg} is false:
+			send "%player% is back and has received your message" to {skchat.%player%.tellto}
+			broadcast "%player% is no longer AFK!"
+			wait 2 seconds
+			message "AFK Message from %{skchat.%player%.tellfrom}%: <aqua>%{skchat.%player%.telltext}% "
+			set {skchat.%player%.tellnomsg} to true
+		else:
+			message "You have no AFK messages"
+			broadcast "%player% is no longer AFK!"
+
+command /skWatch <player>:
+	permission: skchat.watch
+	permission: skchat.nowatch
+	description: Get notified when someone chats!
+	trigger:
+		player has permission "skchat.watch":
+			#{%argument 1%.watched} does not have permission "skchat.nowatch":
+			if {skchat.%player%.watchmode} is false:
+				set {skchat.%player%.watchmode} to true
+				set variable {skchat.%argument 1%.watched} to player argument
+				set {skchat.%argument 1%.watcher} to player
+				message "Now watching %{skchat.%player%.watched}%"
+				set {skchat.%argument 1%.watched} to true
+			else:
+				message "You are already watching %{skchat.%argument 1%.watched}%. Use /skWatchoff to turn watch mode off."
+			#else:
+				#message "This player cannot be watched"
+		else:
+			message "You don't have the required permissions"
+
+on chat:
+	if {skchat.%player%.watched} is true:
+		send "<aqua>%player% chatted!" to {skchat.%player%.watcher}
+	else:
+		stop trigger
+
+command /skWatchoff:
+	permission: skchat.watch
+	description: Turn watch mode off.
+	trigger:
+		player has permission "skchat.watch":
+			if {skchat.%player%.watchmode} is false:
+				set {skchat.%player%.watchmode} to false
+				message "Watch mode is now off"
+				stop trigger
+			else:
+				message "Watch mode is already off"
+				stop trigger
+		else:
+			message "You do not have the required permission"
+
+
+
+
+
+		

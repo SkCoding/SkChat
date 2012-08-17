@@ -1,0 +1,5 @@
+skTell <player> <text> - Send a message to a a player - skchat.tell
+skAfk - Set yourself as AFK - skchat.afk
+skWatchon <player> - Watch another player - skchat.watch
+skchat.nowatch - This player cannot be watched
+skWatchoff - Turn watch mode off - skchat.watch

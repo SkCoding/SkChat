@@ -1,0 +1,12 @@
+SkAfk
+{skchat.%player%.tellto} - The player sending the message
+{skchat.%argument 1%.telltext} - The sender's message
+{skchat.%argument 1%.tellfrom} - The sender
+{skchat.%player%.tellfrom} - The same as {skchat.%argument 1%.tellfrom}
+{skchat.%player%.telltext} - The same as {skchat.%argument 1%.telltext}
+{skchat.%argument 1%.tellnomsg} - If the receiver has 0 AFK messages
+
+SkWatch
+{skchat.%player%.watchmode} - If Watch mode is on or off
+{skchat.%argument 1%.watched} - The player being watched
+{skchat.%argument 1%.watcher} - Who the player is being watched by
